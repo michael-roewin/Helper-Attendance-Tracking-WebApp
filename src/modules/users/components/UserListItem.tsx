@@ -7,6 +7,8 @@ import { getInitials } from '../../../helpers/get-initials';
 
 interface UserListItemProps {
   user: User;
+  onClickEdit?: (user: User) => void,
+  onClickDelete?: (user: User) => void,
 }
 
 export default function UserListItem(props: UserListItemProps) {
@@ -15,13 +17,25 @@ export default function UserListItem(props: UserListItemProps) {
   const items: MenuProps['items'] = [
     {
       label: 'Edit',
-      key: '0',
+      key: 'edit',
     },
     {
       label: 'Delete',
-      key: '1',
+      key: 'delete',
     },
   ];
+
+  const onItemClick = (e: { key: string; }) => {
+    switch (e.key) {
+      case 'edit':
+        props?.onClickEdit?.(user);
+        break;
+
+      case 'delete':
+        props?.onClickDelete?.(user);
+        break;
+    }
+  }
 
   return (
     <div className="user-list-item py-4 pl-2 flex items-center">
@@ -31,7 +45,7 @@ export default function UserListItem(props: UserListItemProps) {
         <small className="username text-xs">{`${user.username}`}</small>
       </div>
       <div className="actions grow text-right">
-        <Dropdown className="p-2" menu={{ items }} trigger={['click']}>
+        <Dropdown className="p-2" menu={{ items, onClick: onItemClick }} trigger={['click']}>
           <Button type="text" icon={<EllipsisOutlined rotate={90} />}></Button>
         </Dropdown>
       </div>

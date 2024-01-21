@@ -59,7 +59,7 @@ export const Login: React.FC = () => {
     if (token) {
       navigate("/");
     }
-  })
+  }, [])
 
   return (
     <div className="login-wrap">
