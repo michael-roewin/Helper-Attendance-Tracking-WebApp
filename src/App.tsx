@@ -3,8 +3,8 @@ import './App.scss'
 import Home from './pages/Home';
 import About from './pages/About';
 import { AuthRoutes } from './modules/auth/routes';
-import { UserRoutes } from './modules/users/routes';
-import { EmployeeRoutes } from './modules/employees/routes';
+import { UserRoutes } from './modules/users/user-routes';
+import { EmployeeRoutes } from './modules/employees/employee-routes';
 import AppLayout from './layouts/AppLayout';
 import { AppContext } from './app-context';
 import { useEffect, useState } from 'react';

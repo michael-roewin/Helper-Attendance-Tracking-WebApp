@@ -3,10 +3,11 @@ import './EmployeeListItem.scss'
 import { EllipsisOutlined } from '@ant-design/icons';
 import Avatar from '../../../components/Avatar';
 import { getInitials } from '../../../helpers/get-initials';
-import { Employee } from '../../../interfaces/empoyee';
+import { Employee } from '../../../interfaces/employee';
 
 interface EmployeeListItemProps {
   employee: Employee;
+  onClickView?: (employee: Employee) => void,
   onClickEdit?: (employee: Employee) => void,
   onClickDelete?: (employee: Employee) => void,
 }
@@ -15,6 +16,10 @@ export default function EmployeeListItem(props: EmployeeListItemProps) {
   const { employee } = props;
 
   const items: MenuProps['items'] = [
+    {
+      label: 'View Profile',
+      key: 'view',
+    },
     {
       label: 'Edit',
       key: 'edit',
@@ -27,6 +32,10 @@ export default function EmployeeListItem(props: EmployeeListItemProps) {
 
   const onItemClick = (e: { key: string; }) => {
     switch (e.key) {
+      case 'view':
+        props?.onClickView?.(employee);
+        break;
+
       case 'edit':
         props?.onClickEdit?.(employee);
         break;

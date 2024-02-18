@@ -7,6 +7,8 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../interfaces/user';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../app-context';
+import './UserList.scss';
+import { routeTransformer } from '../../../helpers/route-transformer';
 
 function UserList() {
   const [ users, setUsers ] = useState<User[]>([]);
@@ -29,7 +31,12 @@ function UserList() {
   }, []);
 
   const handleEditClick = (user: User) => {
-    navigate(`/users/${user.id}/edit`)
+    navigate(
+      routeTransformer(
+        userRoutes.EDIT_USER,
+        { userId: user.id.toString() }
+      )
+    );
     console.log('edit', user);
   }
 
@@ -89,7 +96,7 @@ function UserList() {
             })}
           </div>)
         :
-          (Array.from({ length: 6})).map((val, idx) => (<Skeleton className="paragraph-no-mt mb-3" active avatar={{ size: 48}} paragraph={{ width: [150, 100] }} title={false} key={idx}></Skeleton>))
+          (Array.from({ length: 6})).map((val, idx) => (<Skeleton className="paragraph-no-mt py-4 pl-2 flex items-center" active avatar={{ size: 48}} paragraph={{ width: [150, 100] }} title={false} key={idx}></Skeleton>))
     }
     </>
   )

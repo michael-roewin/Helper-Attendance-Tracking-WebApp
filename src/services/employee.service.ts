@@ -1,11 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
-import { Employee } from '../interfaces/empoyee';
+import { Employee } from '../interfaces/employee';
 import { EmployeeCreateRequestDto } from '../dtos/employee-create-request.dto';
+import { EmployeeSalaryReport } from '../interfaces/employee-salary-report';
 
 const apiUrl = import.meta.env.VITE_API_URL + 'employees';
 
 function getEmployee(employeeId: number): Promise<AxiosResponse<Employee>> {
   return axios.get<Employee>(`${apiUrl}/${employeeId}`);
+}
+
+function getEmployeeSalaryReport(employeeId: number): Promise<AxiosResponse<EmployeeSalaryReport>> {
+  return axios.get<EmployeeSalaryReport>(`${apiUrl}/${employeeId}/salary-report`);
 }
 
 function getEmployees(): Promise<AxiosResponse<Employee[]>> {
@@ -26,6 +31,7 @@ function deleteEmployee(employeeId: number): Promise<AxiosResponse> {
 
 export const EmployeeService = {
   getEmployee,
+  getEmployeeSalaryReport,
   getEmployees,
   createEmployee,
   updateEmployee,

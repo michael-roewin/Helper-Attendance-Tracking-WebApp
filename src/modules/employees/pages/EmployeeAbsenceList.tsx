@@ -1,18 +1,21 @@
 import { Button, Col, Row, Skeleton, theme } from 'antd';
 import { employeeRoutes } from '../constants';
-import { Link, useNavigate } from 'react-router-dom';
-import EmployeeListItem from '../components/EmployeeListItem';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
-import { EmployeeService } from '../../../services/employee.service';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../app-context';
 import { Employee } from '../../../interfaces/employee';
 import './EmployeeList.scss'
 import { routeTransformer } from '../../../helpers/route-transformer';
+import { EmployeeLeaveService } from '../../../services/employee-leaves.service';
+import { EmployeeLeave } from '../../../interfaces/employee-leave';
+import { EmployeeLeaveType } from '../../../enums/employee-leave-type';
+import EmployeeLeaveListItem from '../components/EmployeeLeaveListItem';
 
-function EmployeeList() {
-  const [ employees, setEmployees ] = useState<Employee[]>([]);
-  const [ employeesLoaded, setEmployeesLoaded ] = useState<boolean>(false);
+export default function EmployeeAbsenceList() {
+  const employee = useOutletContext<Employee>();
+  const [ employeeAbsences, setEmployeeAbences ] = useState<EmployeeLeave[]>([]);
+  const [ employeeAbsencesLoaded, setEmployeeAbsencesLoaded ] = useState<boolean>(false);
   const context = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -21,45 +24,39 @@ function EmployeeList() {
   } = theme.useToken();
 
   const getEmployees = async () => {
-    const response = await EmployeeService.getEmployees();
-    setEmployees(response.data);
-    setEmployeesLoaded(true);
+    const response = await EmployeeLeaveService.getEmployeeLeaves(employee.id, EmployeeLeaveType.ABSENT);
+    setEmployeeAbences(response.data);
+    setEmployeeAbsencesLoaded(true);
   }
 
   useEffect(() => {
     getEmployees();
   }, []);
 
-  const handleViewClick = (employee: Employee) => {
+  const handleEditClick = (employeeLeave: EmployeeLeave) => {
     navigate(
       routeTransformer(
-        employeeRoutes.EMPLOYEE_PROFILE,
-        { employeeId: employee.id.toString() }
+        employeeRoutes.EDIT_EMPLOYEE_ABSENCE,
+        {
+          employeeId: employee.id.toString(),
+          employeeAbsenceId: employeeLeave.id.toString(),
+        }
       )
     );
   }
 
-  const handleEditClick = (employee: Employee) => {
-    navigate(
-      routeTransformer(
-        employeeRoutes.EDIT_EMPLOYEE,
-        { employeeId: employee.id.toString() }
-      )
-    );
-  }
-
-  const handleDeleteClick = async (employee: Employee) => {
-    setEmployeesLoaded(false);
+  const handleDeleteClick = async (employeeLeave: EmployeeLeave) => {
+    setEmployeeAbsencesLoaded(false);
 
     try {
-      await EmployeeService.deleteEmployee(employee.id);
+      await EmployeeLeaveService.deleteEmployeeLeave(employee.id, employeeLeave.id);
 
       context?.setAppState((appState) => ({
         ...appState,
         notification: {
           message: 'Success',
           description:
-            'Employee Succesfully Deleted',
+            'Employee Absence Succesfully Deleted',
           duration: 3,
           icon: <CheckCircleOutlined style={{ color: colorSuccess }} />,
         }
@@ -67,7 +64,7 @@ function EmployeeList() {
 
       getEmployees();
     } catch (e) {
-      const description = 'Error encountered in deleting employee';
+      const description = 'Error encountered in deleting employee absence';
 
       context?.setAppState((appState) => ({
         ...appState,
@@ -84,27 +81,23 @@ function EmployeeList() {
   return (
     <>
     <Row className="mb-4">
-      <Col span={12}>
-        <h2 className="m-0">Employee List</h2>
-      </Col>
-      <Col span={12} className="text-right">
-        <Link to={employeeRoutes.ADD_EMPLOYEE}>
+      <Col span={24} className="text-right">
+        <Link to={routeTransformer(employeeRoutes.ADD_EMPLOYEE_ABSENCE, { employeeId: employee?.id?.toString() })}>
           <Button type="primary" size="large">
-            Add Employee
+            Add Employee Absence
           </Button>
         </Link>
       </Col>
     </Row>
     {
-      employeesLoaded
+      employeeAbsencesLoaded
         ?
           (<div className="employee-list">
-            {employees.map((employee) => {
+            {employeeAbsences.map((employeeAbsence) => {
               return (
-              <EmployeeListItem
-                key={employee.id}
-                employee={employee}
-                onClickView={handleViewClick}
+              <EmployeeLeaveListItem
+                key={employeeAbsence.id}
+                employeeLeave={employeeAbsence}
                 onClickEdit={handleEditClick}
                 onClickDelete={handleDeleteClick} />
               );
@@ -116,5 +109,3 @@ function EmployeeList() {
     </>
   )
 }
-
-export default EmployeeList;

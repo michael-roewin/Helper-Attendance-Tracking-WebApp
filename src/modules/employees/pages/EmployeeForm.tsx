@@ -6,7 +6,7 @@ import { EmployeeService } from '../../../services/employee.service';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../app-context';
 import { AxiosError } from 'axios';
-import { Employee } from '../../../interfaces/empoyee';
+import { Employee } from '../../../interfaces/employee';
 import { EmployeeCreateRequestDto } from '../../../dtos/employee-create-request.dto';
 import { User } from '../../../interfaces/user';
 import { filterNumberKeys } from '../../../helpers/filter-number-keys';
@@ -51,7 +51,7 @@ function EmployeeForm() {
           for (const prop in employeeData.data) {
             if (prop === 'user') {
               for (const userProp in employeeData.data['user']) {
-                formFields.push({ name: userProp, value: employeeData.data['user'][userProp as keyof Employee] })
+                formFields.push({ name: userProp, value: employeeData.data['user'][userProp as keyof User] })
               }
             } else if (validFields.includes(prop) || validFields.includes(prop)) {
               formFields.push({ name: prop, value: employee[prop as keyof Employee] })
@@ -142,7 +142,7 @@ function EmployeeForm() {
 
   const handleFormCancel = () => {
     if (!isFormTouched) {
-      navigate(employeeRoutes.USER_LIST);
+      navigate(employeeRoutes.EMPLOYEE_LIST);
       return false;
     }
 
@@ -150,7 +150,7 @@ function EmployeeForm() {
       title: 'Confirm',
       content: 'Are you sure you want to leave the page without saving your changes?',
       onOk: () => {
-        navigate(employeeRoutes.USER_LIST)
+        navigate(employeeRoutes.EMPLOYEE_LIST)
       },
       footer: (_, { OkBtn, CancelBtn }) => (
         <>

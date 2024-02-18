@@ -61,7 +61,7 @@ export default function AuthWrapper() {
   return (
     context?.appState?.user ?
     <>
-      <Outlet></Outlet>
+      <Outlet />
     </> : ''
   )
 }
