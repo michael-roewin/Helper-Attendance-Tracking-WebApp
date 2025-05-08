@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { AppContext } from "../app-context";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -59,9 +59,10 @@ export default function AuthWrapper() {
   }, []);
 
   return (
-    context?.appState?.user ?
-    <>
-      <Outlet />
-    </> : ''
+    context?.appState?.user
+      ?
+        <Outlet />
+      :
+        <Navigate to='/login' />
   )
 }

@@ -3,4 +3,6 @@ export interface EmployeeSalaryReport {
   numAbsences: number;
   salaryPerDay: string;
   expectedSalary: string;
+  absencesLastMonth: string;
+  salaryLastMonth: string;
 }

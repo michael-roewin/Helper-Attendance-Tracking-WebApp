@@ -256,24 +256,6 @@ export default function EmployeeAbsenceForm() {
           <TextArea />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Space>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={isSubmitting}>
-              Submit
-            </Button>
-            <Button
-              type="primary"
-              onClick={handleFormCancel}
-              loading={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </Space>
-        </Form.Item>
-
         <Row>
           <Col span={8} className='text-right'>Items: &nbsp;</Col>
           <Col span={16}>
@@ -294,6 +276,24 @@ export default function EmployeeAbsenceForm() {
             </Form.List>
           </Col>
         </Row>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Space>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isSubmitting}>
+              Submit
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleFormCancel}
+              loading={isSubmitting}
+            >
+              Cancel
+            </Button>
+          </Space>
+        </Form.Item>
       </Form>
     </>
   )
